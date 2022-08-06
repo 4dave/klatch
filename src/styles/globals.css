@@ -10,7 +10,7 @@ body {
 }
 
 a {
-  color: inherit;
+  color: #2563EB;
   text-decoration: none;
 }
 
@@ -18,13 +18,19 @@ a {
   box-sizing: border-box;
 }
 
-button {
+@layer utilities {
+  .striped li:nth-child(even) {
+    @apply bg-slate-600 rounded-lg;
+  }
+}
+
+/* button {
   cursor: pointer;
   border-radius: 5px;
   border: 1px solid #ccc;
   background-color: aliceblue;
   padding: 5px;
-}
+} */
 
 button:hover{
   background-color:  rgb(210, 227, 242);

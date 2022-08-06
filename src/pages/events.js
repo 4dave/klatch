@@ -18,6 +18,7 @@ import {
   orderBy,
 } from "firebase/firestore"
 import { Button, FormControl } from "@mui/material"
+import Link from "next/link"
 
 const Events = () => {
   const [date, setDate] = React.useState(null)
@@ -27,8 +28,8 @@ const Events = () => {
   const klatch = nanoid(8)
 
   useEffect(() => {
-    // const q = query(collection(db, "event"), orderBy("name", "desc"))
-    const q = query(collection(db, "event"))
+    const q = query(collection(db, "event"), orderBy("date", "desc"))
+    // const q = query(collection(db, "event"))
     setLoading(true)
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       let items = []
@@ -42,7 +43,6 @@ const Events = () => {
   }, [])
 
   const setFields = (e) => {
-    console.log(date)
     const value = e.target.value
     setEvent({
       ...event,
@@ -56,7 +56,7 @@ const Events = () => {
       klatch: klatch,
       date: date,
     })
-    setEvent({})
+    // setEvents({})
   }
 
   const deleteEvent = async (id) => {
@@ -67,19 +67,7 @@ const Events = () => {
     <>
       <h1 className="container w-full mx-2 text-3xl py-2 mb-2">Events</h1>
       <div className="flex flex-1">
-        <div>
-          {events.map((event) => (
-            <>
-              <div key={event.id}>
-                <p>{event.name}</p>
-                <pre>{event.description}</pre>
-              </div>
-              <button onClick={() => deleteEvent(event.id)}>Delete</button>
-            </>
-          ))}
-        </div>
-
-        <div className="w-96">
+        <div className="w-64 mx-4">
           <FormControl fullWidth>
             <Box
               component="form"
@@ -132,8 +120,39 @@ const Events = () => {
                 onChange={setFields}
               />
             </Box>
-            <Button onClick={() => createEvent()}>Create Event</Button>
+            <Button
+              variant="outlined"
+              size="medium"
+              onClick={() => createEvent()}
+            >
+              Create Event
+            </Button>
           </FormControl>
+        </div>
+
+        <div className="bg-slate-200 p-4">
+          {events.map((event) => (
+            <li className="py-2" key={event.id}>
+              <Link href={`/event?${event.klatch}`}>
+                <a>{event.name}</a>
+              </Link>
+              <div>
+                <span className="mx-3">{event.description}</span>
+                <span className="mx-3">
+                  {new Date(event.date.seconds * 1000).toLocaleDateString(
+                    "en-US"
+                  )}
+                </span>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => deleteEvent(event.id)}
+                >
+                  Delete
+                </Button>
+              </div>
+            </li>
+          ))}
         </div>
       </div>
     </>
