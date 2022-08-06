@@ -54,6 +54,7 @@ const Events = () => {
     await addDoc(collection(db, "event"), {
       ...event,
       klatch: klatch,
+      date: date,
     })
     setEvent({})
   }
@@ -111,18 +112,18 @@ const Events = () => {
                 variant="outlined"
                 onChange={setFields}
               />
-              {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <DatePicker
-                id="date"
-                name="date"
-                label="Date"
-                value={date}
-                onChange={(newValue) => {
-                  setDate(newValue)
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider> */}
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  id="date"
+                  name="date"
+                  label="Date"
+                  value={date}
+                  onChange={(newValue) => {
+                    setDate(newValue)
+                  }}
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
               <TextField
                 id="location"
                 name="location"
