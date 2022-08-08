@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import Box from "@mui/material/Box"
 import TextField from "@mui/material/TextField"
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
@@ -10,26 +10,26 @@ import {
   query,
   collection,
   onSnapshot,
-  updateDoc,
   doc,
-  addDoc,
   deleteDoc,
-  serverTimestamp,
   orderBy,
+  setDoc,
 } from "firebase/firestore"
 import { Button, FormControl } from "@mui/material"
 import Link from "next/link"
 
 const Events = () => {
-  const [date, setDate] = React.useState(null)
-  const [loading, setLoading] = React.useState(false)
-  const [events, setEvents] = React.useState([])
-  const [event, setEvent] = React.useState({})
-  const klatch = nanoid(8)
+  const [date, setDate] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [events, setEvents] = useState([])
+  const [formFields, setFormFields] = useState({
+    name: "",
+    description: "",
+    location: "",
+  })
 
   useEffect(() => {
     const q = query(collection(db, "event"), orderBy("date", "desc"))
-    // const q = query(collection(db, "event"))
     setLoading(true)
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       let items = []
@@ -44,19 +44,25 @@ const Events = () => {
 
   const setFields = (e) => {
     const value = e.target.value
-    setEvent({
-      ...event,
+    setFormFields({
+      ...formFields,
       [e.target.name]: value,
     })
   }
 
   const createEvent = async () => {
-    await addDoc(collection(db, "event"), {
-      ...event,
-      klatch: klatch,
+    // await addDoc(collection(db, "event"), {  // this works and firestore creates an id
+    // using doc() can set id
+    await setDoc(doc(db, "event", nanoid(8)), {
+      ...formFields,
       date: date,
     })
-    // setEvents({})
+    setFormFields({
+      name: "",
+      description: "",
+      location: "",
+    })
+    setDate(null)
   }
 
   const deleteEvent = async (id) => {
@@ -68,6 +74,7 @@ const Events = () => {
       <h1 className="container w-full mx-2 text-3xl py-2 mb-2">Events</h1>
       <div className="flex flex-1">
         <div className="w-64 mx-4">
+          {loading && <p>Loading...</p>}
           <FormControl fullWidth>
             <Box
               component="form"
@@ -78,20 +85,13 @@ const Events = () => {
               autoComplete="off"
               className="flex flex-col"
             >
-              {/* <TextField
-              disabled
-              id={klatch}
-              name="klatch"
-              label="event id"
-              variant="outlined"
-              defaultValue=""
-            /> */}
               <TextField
                 id="name"
                 name="name"
                 label="Name"
                 variant="outlined"
                 onChange={setFields}
+                value={formFields.name}
               />
               <TextField
                 id="description"
@@ -99,6 +99,7 @@ const Events = () => {
                 label="Description"
                 variant="outlined"
                 onChange={setFields}
+                value={formFields.description}
               />
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
@@ -118,6 +119,7 @@ const Events = () => {
                 label="Location"
                 variant="outlined"
                 onChange={setFields}
+                value={formFields.location}
               />
             </Box>
             <Button
@@ -133,7 +135,8 @@ const Events = () => {
         <div className="bg-slate-200 p-4">
           {events.map((event) => (
             <li className="py-2" key={event.id}>
-              <Link href={`/event?${event.klatch}`}>
+              {/* <Link href={`/event?${event.klatch}`}> */}
+              <Link href={`/event?${event.id}`}>
                 <a>{event.name}</a>
               </Link>
               <div>
