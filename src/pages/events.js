@@ -56,6 +56,7 @@ const Events = () => {
     await setDoc(doc(db, "event", nanoid(8)), {
       ...formFields,
       date: date,
+      guests: [],
     })
     setFormFields({
       name: "",
