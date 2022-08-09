@@ -71,89 +71,98 @@ const Events = () => {
   }
 
   return (
-    <div className="m-4 w-screen">
-      <div className="flex flex-col md:flex-row justify-center">
-        <div>
-          {loading && <p>Loading...</p>}
-          <FormControl fullWidth>
-            <Box
-              component="form"
-              sx={{
-                "& > :not(style)": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-              className="flex flex-col"
-            >
-              <TextField
-                id="name"
-                name="name"
-                label="Name"
-                variant="outlined"
-                onChange={setFields}
-                value={formFields.name}
-              />
-              <TextField
-                id="description"
-                name="description"
-                label="Description"
-                variant="outlined"
-                onChange={setFields}
-                value={formFields.description}
-              />
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  id="date"
-                  name="date"
-                  label="Date"
-                  value={date}
-                  onChange={(newValue) => {
-                    setDate(newValue)
+    <div className="w-screen p-4">
+      <div className="flex flex-col md:flex-row gap-2 justify-center">
+        <div className="flex flex-col items-center">
+          <div className="p-4 border border-slate-400 bg-violet-100 shadow-lg min-w-full">
+            <div className="flex flex-col gap-2">
+              <span className="text-4xl text-slate-700">Add Event</span>
+              <FormControl fullWidth>
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "auto" },
                   }}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
-              <TextField
-                id="location"
-                name="location"
-                label="Location"
-                variant="outlined"
-                onChange={setFields}
-                value={formFields.location}
-              />
-            </Box>
-            <Button
-              variant="outlined"
-              size="medium"
-              onClick={() => createEvent()}
-            >
-              Create Event
-            </Button>
-          </FormControl>
-        </div>
-        <div>
-          {events.map((event) => (
-            <li className="py-2" key={event.id}>
-              <Link href={`/event?${event.id}`}>
-                <a>{event.name}</a>
-              </Link>
-              <div>
-                <span className="mx-3">{event.description}</span>
-                <span className="mx-3">
-                  {new Date(event.date.seconds * 1000).toLocaleDateString(
-                    "en-US"
-                  )}
-                </span>
+                  noValidate
+                  autoComplete="off"
+                  className="flex flex-col"
+                >
+                  <TextField
+                    id="name"
+                    name="name"
+                    label="Name"
+                    variant="outlined"
+                    onChange={setFields}
+                    value={formFields.name}
+                  />
+                  <TextField
+                    id="description"
+                    name="description"
+                    label="Description"
+                    variant="outlined"
+                    onChange={setFields}
+                    value={formFields.description}
+                  />
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      id="date"
+                      name="date"
+                      label="Date"
+                      value={date}
+                      onChange={(newValue) => {
+                        setDate(newValue)
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </LocalizationProvider>
+                  <TextField
+                    id="location"
+                    name="location"
+                    label="Location"
+                    variant="outlined"
+                    onChange={setFields}
+                    value={formFields.location}
+                  />
+                </Box>
                 <Button
                   variant="outlined"
-                  size="small"
-                  onClick={() => deleteEvent(event.id)}
+                  size="medium"
+                  onClick={() => createEvent()}
                 >
-                  Delete
+                  Create Event
                 </Button>
-              </div>
-            </li>
-          ))}
+              </FormControl>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="p-4 border border-slate-400 bg-violet-100 shadow-lg">
+            <div className="flex flex-col gap-2">
+              <span className="text-4xl text-slate-700">Event List</span>
+              {events.map((event) => (
+                <li className="py-2 text-2xl" key={event.id}>
+                  <Link href={`/event?${event.id}`}>
+                    <a>{event.name}</a>
+                  </Link>
+                  <div>
+                    <span className="mx-3">{event.description}</span>
+                    <span className="mx-3">
+                      {new Date(event.date.seconds * 1000).toLocaleDateString(
+                        "en-US"
+                      )}
+                    </span>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      onClick={() => deleteEvent(event.id)}
+                    >
+                      Delete
+                    </Button>
+                  </div>
+                </li>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
