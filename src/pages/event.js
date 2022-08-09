@@ -6,7 +6,9 @@ import { BsCalendarDate } from "react-icons/bs"
 import { MdOutlineLocationOn } from "react-icons/md"
 import { BsPersonCheck } from "react-icons/bs"
 import { BsPersonX } from "react-icons/bs"
+import { BsPersonDash } from "react-icons/bs"
 import { BiUserVoice } from "react-icons/bi"
+import { GrDocumentText } from "react-icons/gr"
 
 const Event = () => {
   const { query } = useRouter()
@@ -60,6 +62,19 @@ const Event = () => {
     })
   }
 
+  const rsvpStatus = (rsvp) => {
+    switch (rsvp) {
+      case "Yes":
+        return <BsPersonCheck className="text-green-500 text-2xl" />
+      case "No":
+        return <BsPersonX className="text-red-500 text-2xl" />
+      case "Maybe":
+        return <BsPersonDash className="text-slate-500 text-2xl" />
+      default:
+        return <BsPersonDash className="text-slate-500 text-2xl" />
+    }
+  }
+
   return (
     // body layout
     <div className="w-screen p-4">
@@ -74,13 +89,20 @@ const Event = () => {
             <span className="text-2xl mb-4">EVENT</span>
             <div className="flex flex-row items-center gap-2">
               <BsCalendarDate />
-              {event.date?.toDate().toLocaleDateString("en-US")}
+              {event.date?.toDate().toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+              })}
             </div>
             <div className="flex flex-row items-center gap-2 text-4xl">
               {event.name}
             </div>
             <div className="flex flex-row items-center gap-2 flex-grow">
-              <BsCalendarDate />
+              <GrDocumentText />
               {event.description}
             </div>
             <div className="flex flex-row items-center gap-2 flex-grow">
@@ -91,29 +113,43 @@ const Event = () => {
             </div>
           </div>
         </div>
-
         {/* ################################################################## */}
-
+        {/* guests container */}
         {event.guests?.length > 0 && (
           <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
-            {/* guests + comments  */}
+            {/* guests list  */}
             <div className="flex flex-col gap-2">
               <span className="text-2xl mb-4">GUESTS</span>
               {event.guests.map((guest, index) => (
                 <div key={index} className="flex flex-row gap-2 items-center">
-                  <span>
-                    {guest.rsvp === "Yes" ? (
-                      <BsPersonCheck className="text-green-500 text-2xl" />
-                    ) : (
-                      <BsPersonX className="text-red-500 text-2xl" />
-                    )}
-                  </span>
+                  <span>{rsvpStatus(guest.rsvp)}</span>
                   <span className="font-medium">{guest.name}</span>
                 </div>
               ))}
             </div>
           </div>
         )}
+        {/* ################################################################## */}
+        {/* comments container */}
+        <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
+          {/* comments div */}
+          <div className="flex flex-col gap-2">
+            {/* comments text */}
+            <div className="flex flex-col gap-2">
+              <span className="text-2xl mb-4">COMMENTS</span>
+              {event.guests?.map((guest, index) => (
+                <li
+                  key={index}
+                  className="flex flex-row items-center gap-2 list-none italic text-slate-700"
+                >
+                  <BiUserVoice className="text-violet-800 text-2xl" />{" "}
+                  {guest.comment} --
+                  {guest.name}
+                </li>
+              ))}
+            </div>
+          </div>
+        </div>
         {/* ################################################################## */}
         {/* rsvp form */}
         <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
@@ -175,30 +211,6 @@ const Event = () => {
               >
                 Submit
               </button>
-            </div>
-          </div>
-        </div>
-
-        {/* ################################################################## */}
-
-        {/* ################################################################## */}
-        {/* rsvp form */}
-        <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
-          {/* rsvp form divs */}
-          <div className="flex flex-col gap-2">
-            {/* rsvp form input gaps */}
-            <div className="flex flex-col gap-2">
-              <span className="text-2xl mb-4">COMMENTS</span>
-              {event.guests?.map((guest, index) => (
-                <li
-                  key={index}
-                  className="flex flex-row items-center gap-2 list-none italic text-slate-700"
-                >
-                  <BiUserVoice className="text-violet-800 text-2xl" />{" "}
-                  {guest.comment} --
-                  {guest.name}
-                </li>
-              ))}
             </div>
           </div>
         </div>
