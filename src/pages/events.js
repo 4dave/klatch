@@ -74,7 +74,7 @@ const Events = () => {
     <div className="w-screen p-4">
       <div className="flex flex-col md:flex-row gap-2 justify-center">
         <div className="flex flex-col items-center">
-          <div className="p-4 border border-slate-400 bg-violet-100 shadow-lg min-w-full">
+          <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg min-w-full">
             <div className="flex flex-col gap-2">
               <span className="text-4xl text-slate-700">Add Event</span>
               <FormControl fullWidth>
@@ -136,7 +136,7 @@ const Events = () => {
           </div>
         </div>
         <div className="flex flex-col items-center">
-          <div className="p-4 border border-slate-400 bg-violet-100 shadow-lg">
+          <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
             <div className="flex flex-col gap-2">
               <span className="text-4xl text-slate-700">Event List</span>
               {events.map((event) => (

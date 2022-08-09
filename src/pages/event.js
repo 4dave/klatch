@@ -74,7 +74,7 @@ const Event = () => {
         {/* ################################################################## */}
         {/* event card */}
 
-        <div className="p-4 border border-slate-400 bg-violet-100 shadow-lg">
+        <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
           {/* event data divs */}
           <div className="flex flex-col gap-2">
             <span className="text-2xl mb-4">EVENT</span>
@@ -101,7 +101,7 @@ const Event = () => {
         {/* ################################################################## */}
 
         {event.guests?.length > 0 && (
-          <div className="p-4 border border-slate-400 bg-violet-100 shadow-lg">
+          <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
             {/* guests + comments  */}
             <div className="flex flex-col gap-2">
               <span className="text-2xl mb-4">GUESTS</span>
@@ -122,7 +122,7 @@ const Event = () => {
         )}
         {/* ################################################################## */}
         {/* rsvp form */}
-        <div className="p-4 border border-slate-400 bg-violet-100 shadow-lg">
+        <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
           {/* rsvp form divs */}
           <div className="flex flex-col gap-2">
             {/* rsvp form input gaps */}
@@ -184,7 +184,7 @@ const Event = () => {
 
         {/* ################################################################## */}
         {/* rsvp form */}
-        <div className="p-4 border border-slate-400 bg-violet-100 shadow-lg">
+        <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
           {/* rsvp form divs */}
           <div className="flex flex-col gap-2">
             {/* rsvp form input gaps */}
