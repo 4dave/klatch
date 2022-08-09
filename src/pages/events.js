@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import Box from "@mui/material/Box"
 import { nanoid } from "nanoid"
 import { db } from "../firebase"
 import {
@@ -12,7 +11,6 @@ import {
   setDoc,
   Timestamp,
 } from "firebase/firestore"
-import { Button, FormControl } from "@mui/material"
 import Link from "next/link"
 import { MdOutlineDeleteOutline } from "react-icons/md"
 
@@ -77,85 +75,70 @@ const Events = () => {
           <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg min-w-full">
             <div className="flex flex-col gap-2">
               <span className="text-4xl text-slate-700">Add Event</span>
-              <FormControl fullWidth>
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 1, width: "auto" },
+              <div className="form__group">
+                <input
+                  type="name"
+                  id="name"
+                  className="form__field"
+                  placeholder="name"
+                  name="name"
+                  onChange={setFields}
+                  value={formFields.name}
+                />
+                <label htmlFor="email" className="form__label">
+                  Name
+                </label>
+              </div>
+              <div className="form__group">
+                <input
+                  type="description"
+                  id="description"
+                  className="form__field"
+                  placeholder="description"
+                  name="description"
+                  onChange={setFields}
+                  value={formFields.description}
+                />
+                <label htmlFor="email" className="form__label">
+                  Description
+                </label>
+              </div>
+              <div className="form__group">
+                <input
+                  type="location"
+                  id="location"
+                  className="form__field"
+                  placeholder="location"
+                  name="location"
+                  onChange={setFields}
+                  value={formFields.location}
+                />
+                <label htmlFor="email" className="form__label">
+                  Location
+                </label>
+              </div>
+              <div className="form__group">
+                <input
+                  type="datetime-local"
+                  id="date"
+                  className="form__field"
+                  placeholder="Date"
+                  name="date"
+                  value={date}
+                  onChange={(e) => {
+                    setDate(e.target.value)
                   }}
-                  noValidate
-                  autoComplete="off"
-                  className="flex flex-col"
-                >
-                  <div className="form__group">
-                    <input
-                      type="name"
-                      id="name"
-                      className="form__field"
-                      placeholder="name"
-                      name="name"
-                      onChange={setFields}
-                      value={formFields.name}
-                    />
-                    <label htmlFor="email" className="form__label">
-                      Name
-                    </label>
-                  </div>
-                  <div className="form__group">
-                    <input
-                      type="description"
-                      id="description"
-                      className="form__field"
-                      placeholder="description"
-                      name="description"
-                      onChange={setFields}
-                      value={formFields.description}
-                    />
-                    <label htmlFor="email" className="form__label">
-                      Description
-                    </label>
-                  </div>
-                  <div className="form__group">
-                    <input
-                      type="location"
-                      id="location"
-                      className="form__field"
-                      placeholder="location"
-                      name="location"
-                      onChange={setFields}
-                      value={formFields.location}
-                    />
-                    <label htmlFor="email" className="form__label">
-                      Location
-                    </label>
-                  </div>
-                  <div className="form__group">
-                    <input
-                      type="datetime-local"
-                      id="date"
-                      className="form__field"
-                      placeholder="Date"
-                      name="date"
-                      value={date}
-                      onChange={(e) => {
-                        setDate(e.target.value)
-                      }}
-                    />
-                    <label htmlFor="date" className="form__label">
-                      Date
-                    </label>
-                  </div>
-
-                  {/*  */}
-                </Box>
-                <Button
-                  variant="standard"
-                  size="medium"
-                  onClick={() => createEvent()}
-                >
-                  Create Event
-                </Button>
-              </FormControl>
+                />
+                <label htmlFor="date" className="form__label">
+                  Date
+                </label>
+              </div>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={() => createEvent()}
+              >
+                Create Event
+              </button>
             </div>
           </div>
         </div>
