@@ -7,12 +7,6 @@ import { MdOutlineLocationOn } from "react-icons/md"
 import { BsPersonCheck } from "react-icons/bs"
 import { BsPersonX } from "react-icons/bs"
 import { BiUserVoice } from "react-icons/bi"
-import Box from "@mui/material/Box"
-import InputLabel from "@mui/material/InputLabel"
-import MenuItem from "@mui/material/MenuItem"
-import FormControl from "@mui/material/FormControl"
-import Select from "@mui/material/Select"
-import TextField from "@mui/material/TextField"
 
 const Event = () => {
   const { query } = useRouter()
@@ -129,47 +123,52 @@ const Event = () => {
             <div className="flex flex-col gap-2">
               <span className="text-2xl mb-4">RSVP</span>
 
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">RSVP</InputLabel>
-                <Select
-                  value={formFields.rsvp}
-                  label="RSVP"
-                  onChange={setFields}
+              <div className="form__group">
+                <label htmlFor="rsvp">RSVP</label>
+                <select
+                  id="rsvp"
                   name="rsvp"
+                  className="form__field"
+                  placeholder="RSVP"
+                  onChange={setFields}
+                  value={formFields.rsvp}
                 >
-                  <MenuItem value={"Yes"}>Yes</MenuItem>
-                  <MenuItem value={"No"}>No</MenuItem>
-                  <MenuItem value={"Maybe"}>Maybe</MenuItem>
-                </Select>
+                  <option style={{ display: "none" }} />
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                  <option value="Maybe">Maybe</option>
+                </select>
+              </div>
 
-                <Box
-                  component="form"
-                  sx={{
-                    "& > :not(style)": { m: 1, width: "25ch" },
-                  }}
-                  noValidate
-                  autoComplete="off"
-                >
-                  <TextField
-                    id="name"
-                    name="name"
-                    label="Name"
-                    variant="outlined"
-                    onChange={setFields}
-                    value={formFields.name}
-                  />
-                  <TextField
-                    id="comment"
-                    name="comment"
-                    label="Comment"
-                    variant="outlined"
-                    onChange={setFields}
-                    value={formFields.comment}
-                    placeholder="say something nice"
-                  />
-                </Box>
-              </FormControl>
+              <div className="form__group">
+                <input
+                  type="name"
+                  id="name"
+                  className="form__field"
+                  placeholder="Your Email"
+                  name="name"
+                  onChange={setFields}
+                  value={formFields.name}
+                />
+                <label htmlFor="email" className="form__label">
+                  Name
+                </label>
+              </div>
 
+              <div className="form__group">
+                <textarea
+                  id="comment"
+                  className="form__field"
+                  placeholder="Your Message"
+                  rows="6"
+                  name="comment"
+                  onChange={setFields}
+                  value={formFields.comment}
+                ></textarea>
+                <label htmlFor="comment" className="form__label">
+                  Comment
+                </label>
+              </div>
               <button
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 onClick={() => addRSVP()}

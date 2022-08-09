@@ -14,6 +14,7 @@ import {
   deleteDoc,
   orderBy,
   setDoc,
+  Timestamp,
 } from "firebase/firestore"
 import { Button, FormControl } from "@mui/material"
 import Link from "next/link"
@@ -53,9 +54,10 @@ const Events = () => {
   const createEvent = async () => {
     // await addDoc(collection(db, "event"), {  // this works and firestore creates an id
     // using doc() can set id
+    const rsvpDate = Timestamp.fromDate(new Date(date))
     await setDoc(doc(db, "event", nanoid(8)), {
       ...formFields,
-      date: date,
+      date: rsvpDate,
       guests: [],
     })
     setFormFields({
@@ -91,7 +93,7 @@ const Events = () => {
                     id="name"
                     name="name"
                     label="Name"
-                    variant="outlined"
+                    variant="standard"
                     onChange={setFields}
                     value={formFields.name}
                   />
@@ -99,11 +101,19 @@ const Events = () => {
                     id="description"
                     name="description"
                     label="Description"
-                    variant="outlined"
+                    variant="standard"
                     onChange={setFields}
                     value={formFields.description}
                   />
-                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <TextField
+                    id="location"
+                    name="location"
+                    label="Location"
+                    variant="standard"
+                    onChange={setFields}
+                    value={formFields.location}
+                  />
+                  {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <DatePicker
                       id="date"
                       name="date"
@@ -112,20 +122,37 @@ const Events = () => {
                       onChange={(newValue) => {
                         setDate(newValue)
                       }}
-                      renderInput={(params) => <TextField {...params} />}
+                      renderInput={(params) => (
+                        <TextField {...params} variant="standard" />
+                      )}
                     />
-                  </LocalizationProvider>
-                  <TextField
-                    id="location"
-                    name="location"
-                    label="Location"
-                    variant="outlined"
-                    onChange={setFields}
-                    value={formFields.location}
-                  />
+                  </LocalizationProvider> */}
+
+                  {/*  */}
+
+                  <div className="form__group">
+                    <input
+                      type="datetime-local"
+                      id="date"
+                      className="form__field"
+                      placeholder="Date"
+                      name="date"
+                      onChange={(e) => {
+                        setDate(e.target.value)
+                      }}
+
+                      // value={date}
+                      // e.target.value = "2022-08-10T11:47"
+                    />
+                    <label htmlFor="date" className="form__label">
+                      Date
+                    </label>
+                  </div>
+
+                  {/*  */}
                 </Box>
                 <Button
-                  variant="outlined"
+                  variant="standard"
                   size="medium"
                   onClick={() => createEvent()}
                 >
