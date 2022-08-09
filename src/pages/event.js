@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { db } from "../firebase"
 import { onSnapshot, doc, updateDoc } from "firebase/firestore"
-import { Button } from "@mui/material"
+import { BsCalendarDate } from "react-icons/bs"
+import { MdOutlineLocationOn } from "react-icons/md"
+import { BsPersonCheck } from "react-icons/bs"
+import { BsPersonX } from "react-icons/bs"
+import { BiUserVoice } from "react-icons/bi"
 import Box from "@mui/material/Box"
-import TextField from "@mui/material/TextField"
 import InputLabel from "@mui/material/InputLabel"
-import FormControl from "@mui/material/FormControl"
 import MenuItem from "@mui/material/MenuItem"
+import FormControl from "@mui/material/FormControl"
 import Select from "@mui/material/Select"
+import TextField from "@mui/material/TextField"
 
 const Event = () => {
   const { query } = useRouter()
@@ -63,31 +67,70 @@ const Event = () => {
   }
 
   return (
-    <div className="container flex flex-col mx-auto border bg-red-400 h-screen w-screen p-4">
-      <div>
-        {deleted && <p>Event not found</p>}
-        {loading && <p>Loading...</p>}
-        <h1 className="text-4xl font-bold text-center">{event.name}</h1>
-      </div>
-      <div>
-        <p>Description: {event.description}</p>
-        <p>Location: {event.location}</p>
-        <p>Date: {event.date?.toDate().toLocaleDateString("en-US")}</p>
+    // body layout
+    <div className="w-screen p-4">
+      {/* flex columns */}
+      <div className="flex flex-col md:flex-row gap-2 justify-center">
+        {/* ################################################################## */}
+        {/* event card */}
 
-        <hr />
-        <div className="w-28 pt-4">
-          <FormControl fullWidth>
-            <Box
-              component="form"
-              sx={{
-                "& > :not(style)": { m: 1, width: "25ch" },
-              }}
-              noValidate
-              autoComplete="off"
-              className="flex flex-col"
-            >
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel>RSVP</InputLabel>
+        <div className="p-4 border border-slate-400 bg-violet-100 shadow-lg">
+          {/* event data divs */}
+          <div className="flex flex-col gap-2">
+            <span className="text-2xl mb-4">EVENT</span>
+            <div className="flex flex-row items-center gap-2">
+              <BsCalendarDate />
+              {event.date?.toDate().toLocaleDateString("en-US")}
+            </div>
+            <div className="flex flex-row items-center gap-2 text-4xl">
+              {event.name}
+            </div>
+            <div className="flex flex-row items-center gap-2 flex-grow">
+              <BsCalendarDate />
+              {event.description}
+            </div>
+            <div className="flex flex-row items-center gap-2 flex-grow">
+              <MdOutlineLocationOn />
+              <a href="https://goo.gl/maps/PsJuYMBVc52k1sdE8" target="blank">
+                {event.location}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* ################################################################## */}
+
+        {event.guests?.length > 0 && (
+          <div className="p-4 border border-slate-400 bg-violet-100 shadow-lg">
+            {/* guests + comments  */}
+            <div className="flex flex-col gap-2">
+              <span className="text-2xl mb-4">GUESTS</span>
+              {event.guests.map((guest, index) => (
+                <div key={index} className="flex flex-row gap-2 items-center">
+                  <span>
+                    {guest.rsvp === "Yes" ? (
+                      <BsPersonCheck className="text-green-500 text-2xl" />
+                    ) : (
+                      <BsPersonX className="text-red-500 text-2xl" />
+                    )}
+                  </span>
+                  <span className="font-medium">{guest.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {/* ################################################################## */}
+        {/* rsvp form */}
+        <div className="p-4 border border-slate-400 bg-violet-100 shadow-lg">
+          {/* rsvp form divs */}
+          <div className="flex flex-col gap-2">
+            {/* rsvp form input gaps */}
+            <div className="flex flex-col gap-2">
+              <span className="text-2xl mb-4">RSVP</span>
+
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">RSVP</InputLabel>
                 <Select
                   value={formFields.rsvp}
                   label="RSVP"
@@ -98,39 +141,70 @@ const Event = () => {
                   <MenuItem value={"No"}>No</MenuItem>
                   <MenuItem value={"Maybe"}>Maybe</MenuItem>
                 </Select>
+
+                <Box
+                  component="form"
+                  sx={{
+                    "& > :not(style)": { m: 1, width: "25ch" },
+                  }}
+                  noValidate
+                  autoComplete="off"
+                >
+                  <TextField
+                    id="name"
+                    name="name"
+                    label="Name"
+                    variant="outlined"
+                    onChange={setFields}
+                    value={formFields.name}
+                  />
+                  <TextField
+                    id="comment"
+                    name="comment"
+                    label="Comment"
+                    variant="outlined"
+                    onChange={setFields}
+                    value={formFields.comment}
+                    placeholder="say something nice"
+                  />
+                </Box>
               </FormControl>
-              <TextField
-                id="name"
-                name="name"
-                label="Name"
-                variant="outlined"
-                onChange={setFields}
-                value={formFields.name}
-              />
-              <TextField
-                id="comment"
-                name="comment"
-                label="Comment"
-                variant="outlined"
-                onChange={setFields}
-                value={formFields.comment}
-              />
-            </Box>
-            <Button variant="outlined" size="small" onClick={() => addRSVP()}>
-              Add
-            </Button>
-          </FormControl>
+
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                onClick={() => addRSVP()}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
         </div>
-        <div className="text-2xl my-2">Guests: </div>
-        <div className="bg-red-300 mt-2 list-none">
-          {event?.guests?.map((guest, index) => (
-            <li key={index}>
-              <div className="font-bold">{guest.name}</div>
-              <div>RSVP: {guest.rsvp}</div>
-              <div>Comment: {guest.comment}</div>
-            </li>
-          ))}
+
+        {/* ################################################################## */}
+
+        {/* ################################################################## */}
+        {/* rsvp form */}
+        <div className="p-4 border border-slate-400 bg-violet-100 shadow-lg">
+          {/* rsvp form divs */}
+          <div className="flex flex-col gap-2">
+            {/* rsvp form input gaps */}
+            <div className="flex flex-col gap-2">
+              <span className="text-2xl mb-4">COMMENTS</span>
+              {event.guests?.map((guest, index) => (
+                <li
+                  key={index}
+                  className="flex flex-row items-center gap-2 list-none italic text-slate-700"
+                >
+                  <BiUserVoice className="text-violet-800 text-2xl" />{" "}
+                  {guest.comment} --
+                  {guest.name}
+                </li>
+              ))}
+            </div>
+          </div>
         </div>
+
+        {/* ################################################################## */}
       </div>
     </div>
   )

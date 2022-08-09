@@ -7,7 +7,8 @@ body {
   padding: 0;
   margin: 0;
   font-family: Roboto;
-  background-color: rgb(71 85 105); /* TW: bg-slate-600 */
+  /* background-color: rgb(71 85 105);  */
+  /* TW: bg-slate-600 */
 }
 
 a {
@@ -33,9 +34,9 @@ a {
   padding: 5px;
 } */
 
-button:hover {
+/* button:hover {
   background-color: rgb(210, 227, 242);
-}
+} */
 
 /* @media (prefers-color-scheme: dark) {
   html {

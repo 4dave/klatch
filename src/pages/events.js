@@ -71,10 +71,9 @@ const Events = () => {
   }
 
   return (
-    <>
-      <h1 className="container w-full mx-2 text-3xl py-2 mb-2">Events</h1>
-      <div className="flex flex-1">
-        <div className="w-64 mx-4">
+    <div className="m-4 w-screen">
+      <div className="flex flex-col md:flex-row justify-center">
+        <div>
           {loading && <p>Loading...</p>}
           <FormControl fullWidth>
             <Box
@@ -132,11 +131,9 @@ const Events = () => {
             </Button>
           </FormControl>
         </div>
-
-        <div className="bg-slate-200 p-4">
+        <div>
           {events.map((event) => (
             <li className="py-2" key={event.id}>
-              {/* <Link href={`/event?${event.klatch}`}> */}
               <Link href={`/event?${event.id}`}>
                 <a>{event.name}</a>
               </Link>
@@ -159,7 +156,7 @@ const Events = () => {
           ))}
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
