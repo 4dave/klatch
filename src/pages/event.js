@@ -75,6 +75,14 @@ const Event = () => {
     }
   }
 
+  const hasComments = () => {
+    if (event.guests?.some((guest) => guest.comment.length > 0)) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   return (
     // body layout
     <div className="w-screen p-4">
@@ -143,16 +151,26 @@ const Event = () => {
             {/* comments text */}
             <div className="flex flex-col gap-2">
               <span className="text-2xl mb-4">COMMENTS</span>
-              {event.guests?.map((guest, index) => (
-                <li
-                  key={index}
-                  className="flex flex-row items-center gap-2 list-none italic text-slate-700"
-                >
-                  <BiUserVoice className="text-violet-800 text-2xl" />{" "}
-                  {guest.comment} --
-                  {guest.name}
-                </li>
-              ))}
+              {!hasComments() ? (
+                <div className="flex flex-row items-center gap-2">
+                  <pre className="italic text-sm">No comments yet</pre>
+                </div>
+              ) : (
+                event.guests?.map((guest, index) => {
+                  if (guest.comment.length > 0) {
+                    return (
+                      <li
+                        key={index}
+                        className="flex flex-row items-center gap-2 list-none italic text-slate-700"
+                      >
+                        <BiUserVoice className="text-violet-800 text-2xl" />{" "}
+                        {guest.comment} --
+                        {guest.name}
+                      </li>
+                    )
+                  }
+                })
+              )}
             </div>
           </div>
         </div>
@@ -191,6 +209,7 @@ const Event = () => {
                   name="name"
                   onChange={setFields}
                   value={formFields.name}
+                  autoComplete="off"
                 />
                 <label htmlFor="email" className="form__label">
                   Name
@@ -206,6 +225,7 @@ const Event = () => {
                   name="comment"
                   onChange={setFields}
                   value={formFields.comment}
+                  autoComplete="off"
                 ></textarea>
                 <label htmlFor="comment" className="form__label">
                   Comment
