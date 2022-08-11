@@ -70,6 +70,45 @@ const Events = () => {
   return (
     <div className="w-screen p-4">
       <div className="flex flex-col md:flex-row gap-2 justify-center">
+        {/* first col */}
+        <div className="flex flex-col items-center">
+          <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
+            {/* SHOW EVENT LIST */}
+
+            {/*  date | name | description | location */}
+
+            {/* ########################################################################### */}
+            <div className="flex flex-col gap-2">
+              <span className="text-4xl text-slate-700">Event List</span>
+              {events.map((event) => (
+                <li className="py-2 list-none" key={event.id}>
+                  <Link href={`/event?${event.id}`}>
+                    <a>{event.name}</a>
+                  </Link>{" "}
+                  -{" "}
+                  {new Date(event.date.seconds * 1000).toLocaleDateString(
+                    "en-US"
+                  )}
+                  <div className="flex flex-col">
+                    <span className="italic text-slate-500">
+                      {event.description}
+                      <span className="text-violet-400">
+                        &nbsp; &nbsp; [{event.guests.length} guests]
+                      </span>
+                    </span>
+                    <button
+                      className="hover:text-red-500 text-red-400 flex items-center"
+                      onClick={() => deleteEvent(event.id)}
+                    >
+                      <MdOutlineDeleteOutline className="flex" /> Delete
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* CREATE NEW EVENT */}
         <div className="flex flex-col items-center">
           <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg min-w-full">
@@ -84,6 +123,7 @@ const Events = () => {
                   name="name"
                   onChange={setFields}
                   value={formFields.name}
+                  autoComplete="off"
                 />
                 <label htmlFor="email" className="form__label">
                   Name
@@ -98,6 +138,7 @@ const Events = () => {
                   name="description"
                   onChange={setFields}
                   value={formFields.description}
+                  autoComplete="off"
                 />
                 <label htmlFor="email" className="form__label">
                   Description
@@ -112,6 +153,7 @@ const Events = () => {
                   name="location"
                   onChange={setFields}
                   value={formFields.location}
+                  autoComplete="off"
                 />
                 <label htmlFor="email" className="form__label">
                   Location
@@ -139,42 +181,6 @@ const Events = () => {
               >
                 Create Event
               </button>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
-            {/* SHOW EVENT LIST */}
-
-            {/*  date | name | description | location */}
-
-            {/* ########################################################################### */}
-            <div className="flex flex-col gap-2">
-              <span className="text-4xl text-slate-700">Event List</span>
-              {events.map((event) => (
-                <li className="py-2 text-2xl list-none" key={event.id}>
-                  <Link href={`/event?${event.id}`}>
-                    <a>{event.name}</a>
-                  </Link>
-                  <div className="flex flex-col">
-                    <span className="italic text-slate-500">
-                      {event.description}
-                      <span className="text-violet-400">
-                        &nbsp; &nbsp; [{event.guests.length} guests]
-                      </span>
-                    </span>
-                    <span>
-                      {new Date(event.date.seconds * 1000).toLocaleDateString(
-                        "en-US"
-                      )}{" "}
-                      <MdOutlineDeleteOutline
-                        onClick={() => deleteEvent(event.id)}
-                        className="cursor-pointer hover:text-red-500"
-                      />
-                    </span>
-                  </div>
-                </li>
-              ))}
             </div>
           </div>
         </div>

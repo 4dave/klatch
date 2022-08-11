@@ -101,12 +101,13 @@ const Event = () => {
             <div className="flex flex-row items-center gap-2 text-4xl">
               {event.name}
             </div>
+
             <div className="flex flex-row items-center gap-2 flex-grow">
-              <GrDocumentText />
               {event.description}
             </div>
+
             <div className="flex flex-row items-center gap-2 flex-grow">
-              <MdOutlineLocationOn />
+              <MdOutlineLocationOn className="text-2xl" />
               <a href="https://goo.gl/maps/PsJuYMBVc52k1sdE8" target="blank">
                 {event.location}
               </a>
@@ -115,20 +116,25 @@ const Event = () => {
         </div>
         {/* ################################################################## */}
         {/* guests container */}
-        {event.guests?.length > 0 && (
-          <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
-            {/* guests list  */}
-            <div className="flex flex-col gap-2">
-              <span className="text-2xl mb-4">GUESTS</span>
-              {event.guests.map((guest, index) => (
+        <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
+          {/* guests list  */}
+          <div className="flex flex-col gap-2">
+            <span className="text-2xl mb-4">GUESTS</span>
+            {event.guests?.length == 0 ? (
+              <div className="flex flex-row items-center gap-2">
+                <pre className="italic text-sm">No guests yet</pre>
+              </div>
+            ) : (
+              event.guests?.map((guest, index) => (
                 <div key={index} className="flex flex-row gap-2 items-center">
                   <span>{rsvpStatus(guest.rsvp)}</span>
                   <span className="font-medium">{guest.name}</span>
                 </div>
-              ))}
-            </div>
+              ))
+            )}
           </div>
-        )}
+        </div>
+        {/* )} */}
         {/* ################################################################## */}
         {/* comments container */}
         <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
