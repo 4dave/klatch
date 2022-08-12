@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import { db } from "../firebase"
-import { onSnapshot, doc, updateDoc } from "firebase/firestore"
+import { onSnapshot, doc, updateDoc, Timestamp } from "firebase/firestore"
 import { BsCalendarDate } from "react-icons/bs"
 import { MdOutlineLocationOn } from "react-icons/md"
 import { BsPersonCheck } from "react-icons/bs"
 import { BsPersonX } from "react-icons/bs"
 import { BsPersonDash } from "react-icons/bs"
 import { BiUserVoice } from "react-icons/bi"
-import { GrDocumentText } from "react-icons/gr"
+import Alert from "../helpers/Alert"
+import CopyURL from "../helpers/CopyURL"
 
 const Event = () => {
   const { query } = useRouter()
   const eventid = Object.keys(query)[0]
+  const [localName, setLocalName] = useState("")
   const [event, setEvent] = useState([])
   const [loading, setLoading] = useState(false)
   const [deleted, setDeleted] = useState(false)
@@ -22,6 +24,19 @@ const Event = () => {
     comment: "",
     rsvpDate: "",
   })
+
+  const setLocalStorage = (name) => {
+    setLocalName(name)
+    localStorage.setItem("klatch-user", JSON.stringify(name))
+  }
+
+  // maybe append the eventID to the localstorage key?
+  useEffect(() => {
+    const username = JSON.parse(localStorage.getItem("klatch-user"))
+    if (localName === "" && username) {
+      setLocalName(username)
+    }
+  }, [])
 
   const getEvent = async () => {
     setLoading(true)
@@ -45,11 +60,13 @@ const Event = () => {
     setFormFields({
       ...formFields,
       [e.target.name]: value,
-      rsvpDate: new Date().toISOString(),
+      // rsvpDate: new Date().toISOString(),
+      rsvpDate: Timestamp.fromDate(new Date()),
     })
   }
 
   const addRSVP = async () => {
+    setLocalStorage(formFields.name)
     const eventRef = doc(db, "event", eventid)
     await updateDoc(eventRef, {
       guests: [...event.guests, formFields],
@@ -83,13 +100,21 @@ const Event = () => {
     }
   }
 
-  return (
+  return deleted ? (
+    <>
+      <div className="w-screen p-4" />
+      <div className="flex flex-col md:flex-row gap-2 justify-center" />
+      <Alert type="error" message="Event not found" />
+    </>
+  ) : (
     // body layout
     <div className="w-screen p-4">
       {/* flex columns */}
       <div className="flex flex-col md:flex-row gap-2 justify-center">
+        {/* welcome message */}
         {/* ################################################################## */}
-        {/* event card */}
+        <Alert type="info" message={`Welcome to Klatch, ${localName}!`} />
+        {/* ################################################################## */}
 
         <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
           {/* event data divs */}
@@ -109,11 +134,9 @@ const Event = () => {
             <div className="flex flex-row items-center gap-2 text-4xl">
               {event.name}
             </div>
-
             <div className="flex flex-row items-center gap-2 flex-grow">
               {event.description}
             </div>
-
             <div className="flex flex-row items-center gap-2 flex-grow">
               <MdOutlineLocationOn className="text-2xl" />
               <a href="https://goo.gl/maps/PsJuYMBVc52k1sdE8" target="blank">
@@ -159,14 +182,25 @@ const Event = () => {
                 event.guests?.map((guest, index) => {
                   if (guest.comment.length > 0) {
                     return (
-                      <li
-                        key={index}
-                        className="flex flex-row items-center gap-2 list-none italic text-slate-700"
-                      >
-                        <BiUserVoice className="text-violet-800 text-2xl" />{" "}
-                        {guest.comment} --
-                        {guest.name}
-                      </li>
+                      <div className="flex flex-col flex-wrap" key={index}>
+                        <span className="flex items-center font-medium gap-2">
+                          <BiUserVoice size={25} className="text-violet-800" />{" "}
+                          {guest.name}{" "}
+                          <span className="text-xs text-slate-500">
+                            {new Date(
+                              guest.rsvpDate.seconds * 1000
+                            ).toLocaleDateString("en-US", {
+                              weekday: "short",
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                            })}
+                          </span>
+                        </span>
+                        <span className="italic">{guest.comment}</span>
+                      </div>
                     )
                   }
                 })
@@ -240,7 +274,17 @@ const Event = () => {
             </div>
           </div>
         </div>
+        {/* ################################################################## */}
 
+        {/* testing container */}
+        <div className="p-4 border border-slate-400 rounded-md bg-violet-100 shadow-lg">
+          <div className="flex flex-col gap-2">
+            <span className="text-2xl mb-4">TESTING</span>
+            <div className="flex flex-row items-center gap-2">
+              <CopyURL />
+            </div>
+          </div>
+        </div>
         {/* ################################################################## */}
       </div>
     </div>
