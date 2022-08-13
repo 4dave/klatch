@@ -1,14 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* below FA import for alert icons - testing */
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css');
 
 html,
 body {
   padding: 0;
   margin: 0;
   font-family: "Roboto", sans-serif;
-  /* background-color: rgb(71 85 105);  */
-  /* TW: bg-slate-600 */
+  background: linear-gradient(90deg, #f6d365 0%, #fda085 100%);
+  /* background: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%); */
 }
 
 a {
@@ -20,11 +22,11 @@ a {
   box-sizing: border-box;
 }
 
-@layer utilities {
+/* @layer utilities {
   .striped li:nth-child(even) {
     @apply bg-slate-600 rounded-lg;
   }
-}
+} */
 
 .form__group {
   position: relative;
