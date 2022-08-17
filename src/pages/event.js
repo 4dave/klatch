@@ -10,14 +10,18 @@ import { BsPersonDash } from "react-icons/bs"
 import { BiUserVoice } from "react-icons/bi"
 import Alert from "../helpers/Alert"
 import CopyURL from "../helpers/CopyURL"
+import GetUserName from "../helpers/getUserName"
 
 const Event = () => {
   const { query } = useRouter()
+  const router = useRouter()
   const eventid = Object.keys(query)[0]
   const [localName, setLocalName] = useState("")
   const [event, setEvent] = useState([])
   const [loading, setLoading] = useState(false)
   const [deleted, setDeleted] = useState(false)
+  const [userName, setUserName] = useState("")
+  const [openModal, setOpenModal] = useState(false)
   const [formFields, setFormFields] = useState({
     name: "",
     rsvp: "",
@@ -36,7 +40,7 @@ const Event = () => {
     if (localName === "" && username) {
       setLocalName(username)
     }
-  }, [])
+  }, [userName])
 
   const getEvent = async () => {
     setLoading(true)
@@ -44,7 +48,8 @@ const Event = () => {
       if (doc.exists()) {
         setEvent(doc.data())
       } else {
-        setDeleted(true)
+        // setDeleted(true)
+        router.push("/deleted")
       }
     })
     setLoading(false)
@@ -100,15 +105,9 @@ const Event = () => {
     }
   }
 
-  return deleted ? (
-    <>
-      <div className="w-screen p-4" />
-      <div className="flex flex-col md:flex-row gap-2 justify-center" />
-      <Alert type="error" message="Event not found" />
-    </>
-  ) : (
+  return (
     // body layout
-    <div className="w-screen p-4">
+    <div className="w-screen p-3">
       {/* flex columns */}
       <div className="flex flex-col gap-2 justify-center md:w-[37rem] mx-auto">
         {/* welcome message */}
@@ -116,10 +115,10 @@ const Event = () => {
         <Alert type="info" message={`Welcome to Klatch, ${localName}!`} />
         {/* ################################################################## */}
 
-        <div className="p-4 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
+        <div className="p-3 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
           {/* event data divs */}
           <div className="flex flex-col gap-2">
-            <span className="text-2xl mb-4">EVENT</span>
+            {/* <span className="text-2xl mb-4">EVENT</span> */}
             <div className="flex flex-row items-center gap-2">
               <BsCalendarDate />
               {event.date?.toDate().toLocaleDateString("en-US", {
@@ -147,7 +146,7 @@ const Event = () => {
         </div>
         {/* ################################################################## */}
         {/* guests container */}
-        <div className="p-4 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
+        <div className="p-3 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
           {/* guests list  */}
           <div className="flex flex-col gap-2">
             <span className="text-2xl mb-4">GUESTS</span>
@@ -168,7 +167,7 @@ const Event = () => {
         {/* )} */}
         {/* ################################################################## */}
         {/* comments container */}
-        <div className="p-4 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
+        <div className="p-3 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
           {/* comments div */}
           <div className="flex flex-col gap-2">
             {/* comments text */}
@@ -210,7 +209,7 @@ const Event = () => {
         </div>
         {/* ################################################################## */}
         {/* rsvp form */}
-        <div className="p-4 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
+        <div className="p-3 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
           {/* rsvp form divs */}
           <div className="flex flex-col gap-2">
             {/* rsvp form input gaps */}
@@ -277,7 +276,7 @@ const Event = () => {
         {/* ################################################################## */}
 
         {/* testing container */}
-        <div className="p-4 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
+        <div className="p-3 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
           <div className="flex flex-col gap-2">
             <span className="text-2xl mb-4">TESTING</span>
             <div className="flex flex-row items-center gap-2">
