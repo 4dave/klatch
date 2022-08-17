@@ -10,7 +10,7 @@ const GetUserName = ({ setUserName }) => {
 
   return (
     <div>
-      <h1>Welcome! What's your first and last name?</h1>
+      <h1>Welcome! Please enter first and last name.</h1>
       <input type="text" />
       <button onClick={(e) => SetUser(e)}>Submit</button>
     </div>
