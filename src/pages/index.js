@@ -10,7 +10,12 @@ export default function Home() {
       <motion.h1
         initial={{ opacity: 0, x: -100 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, ease: "easeInOut", delay: 0.5 }}
+        transition={{
+          type: "spring",
+          duration: 1.5,
+          ease: "easeInOut",
+          delay: 0.5,
+        }}
         className="font-extrabold text-transparent md:text-8xl text-6xl bg-clip-text bg-gradient-to-r from-violet-400 to-pink-600"
       >
         Klatch!
@@ -25,7 +30,7 @@ export default function Home() {
           x: -100,
         }}
         animate={{ opacity: 1, y: 0, scale: 1, rotate: 0, skew: 0, x: 0 }}
-        transition={{ duration: 1, ease: "easeInOut", delay: 1.5 }}
+        transition={{ duration: 1, ease: "easeInOut", delay: 0.5 }}
         className="md:text-8xl text-6xl cursor-pointer"
       >
         🚀
