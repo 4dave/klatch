@@ -22,6 +22,10 @@ const Event = () => {
   const [deleted, setDeleted] = useState(false)
   const [userName, setUserName] = useState("")
   const [openModal, setOpenModal] = useState(false)
+  const [rsvpFormError, setRsvpFormError] = useState("")
+  const [nameFormError, setNameFormError] = useState("")
+  const [rsvpSubmitted, setRsvpSubmitted] = useState(false)
+  const [localMatchesRSVP, setLocalMatchesRSVP] = useState(false)
   const [formFields, setFormFields] = useState({
     name: "",
     rsvp: "",
@@ -52,15 +56,29 @@ const Event = () => {
         router.push("/deleted")
       }
     })
+    // matchLocalName()
     setLoading(false)
     return unsub
   }
+
+  // const matchLocalName = () => {
+  //   event?.guests?.map((guest) => {
+  //     console.log("guest name: ", guest?.name)
+  //     console.log("local name: ", localName)
+  //     if (guest?.name === localName) {
+  //       setLocalMatchesRSVP(true)
+  //       console.log("matched")
+  //     }
+  //   })
+  // }
 
   useEffect(() => {
     eventid && getEvent()
   }, [eventid])
 
   const setFields = (e) => {
+    setNameFormError("")
+    setRsvpFormError("")
     const value = e.target.value
     setFormFields({
       ...formFields,
@@ -71,6 +89,16 @@ const Event = () => {
   }
 
   const addRSVP = async () => {
+    setNameFormError("")
+    setRsvpFormError("")
+    if (formFields.name === "") {
+      setNameFormError("Please enter your name! 😉")
+      return
+    }
+    if (formFields.rsvp === "") {
+      setRsvpFormError("Please select an RSVP option! 😉")
+      return
+    }
     setLocalStorage(formFields.name)
     const eventRef = doc(db, "event", eventid)
     await updateDoc(eventRef, {
@@ -82,6 +110,7 @@ const Event = () => {
       comment: "",
       rsvpDate: "",
     })
+    setRsvpSubmitted(true)
   }
 
   const rsvpStatus = (rsvp) => {
@@ -105,6 +134,8 @@ const Event = () => {
     }
   }
 
+  // console.log(event)
+
   return (
     // body layout
     <div className="w-screen p-3">
@@ -112,7 +143,7 @@ const Event = () => {
       <div className="flex flex-col gap-2 justify-center md:w-[37rem] mx-auto">
         {/* welcome message */}
         {/* ################################################################## */}
-        <Alert type="info" message={`Welcome to Klatch, ${localName}!`} />
+        {/* <Alert type="info" message={`Welcome to Klatch, ${localName}!`} /> */}
         {/* ################################################################## */}
 
         <div className="p-3 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
@@ -209,70 +240,102 @@ const Event = () => {
         </div>
         {/* ################################################################## */}
         {/* rsvp form */}
-        <div className="p-3 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
-          {/* rsvp form divs */}
-          <div className="flex flex-col gap-2">
-            {/* rsvp form input gaps */}
+        {!rsvpSubmitted ? (
+          <div className="p-3 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
+            {/* rsvp form divs */}
             <div className="flex flex-col gap-2">
-              <span className="text-2xl mb-4">RSVP</span>
+              {/* rsvp form input gaps */}
+              <div className="flex flex-col gap-2">
+                {/* <span className="text-2xl mb-4">RSVP</span> */}
+                {nameFormError && (
+                  <span className="text-red-400 mb-1">{nameFormError}</span>
+                )}
+                {rsvpFormError && (
+                  <span className="text-red-400 mb-1">{rsvpFormError}</span>
+                )}
 
-              <div className="form__group">
-                <label htmlFor="rsvp">RSVP</label>
-                <select
-                  id="rsvp"
-                  name="rsvp"
-                  className="form__field"
-                  placeholder="RSVP"
-                  onChange={setFields}
-                  value={formFields.rsvp}
+                <div className="">
+                  <label
+                    htmlFor="rsvp"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    RSVP
+                  </label>
+                  <select
+                    type="select"
+                    id="rsvp"
+                    name="rsvp"
+                    className={`${rsvpFormError ? "border-red-500" : ""}`}
+                    placeholder="RSVP"
+                    onChange={setFields}
+                    value={formFields.rsvp}
+                    required
+                  >
+                    <option style={{ display: "none" }} />
+                    <option value="Yes">Yes</option>
+                    <option value="No">No</option>
+                    <option value="Maybe">Maybe</option>
+                  </select>
+                </div>
+
+                <div className="">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    className={`${nameFormError ? "border-red-500" : ""}`}
+                    placeholder="Name"
+                    name="name"
+                    onChange={setFields}
+                    value={formFields.name}
+                    autoComplete="off"
+                    required
+                  />
+                </div>
+
+                <div className="">
+                  <label
+                    htmlFor="comment"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Comment
+                  </label>
+                  <textarea
+                    type="text"
+                    id="comment"
+                    className=""
+                    placeholder="Comment"
+                    rows="6"
+                    name="comment"
+                    onChange={setFields}
+                    value={formFields.comment}
+                    autoComplete="off"
+                  ></textarea>
+                </div>
+
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={() => addRSVP()}
                 >
-                  <option style={{ display: "none" }} />
-                  <option value="Yes">Yes</option>
-                  <option value="No">No</option>
-                  <option value="Maybe">Maybe</option>
-                </select>
+                  Submit
+                </button>
               </div>
-
-              <div className="form__group">
-                <input
-                  type="name"
-                  id="name"
-                  className="form__field"
-                  placeholder="Your Email"
-                  name="name"
-                  onChange={setFields}
-                  value={formFields.name}
-                  autoComplete="off"
-                />
-                <label htmlFor="email" className="form__label">
-                  Name
-                </label>
-              </div>
-
-              <div className="form__group">
-                <textarea
-                  id="comment"
-                  className="form__field"
-                  placeholder="Your Message"
-                  rows="6"
-                  name="comment"
-                  onChange={setFields}
-                  value={formFields.comment}
-                  autoComplete="off"
-                ></textarea>
-                <label htmlFor="comment" className="form__label">
-                  Comment
-                </label>
-              </div>
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => addRSVP()}
-              >
-                Submit
-              </button>
             </div>
           </div>
-        </div>
+        ) : (
+          <div className="p-3 border border-slate-400 rounded-md bg-violet-200 shadow-lg">
+            <div className="flex flex-col gap-2">
+              <span className="text-2xl text-violet-400 m-4">
+                RSVP received ✔️
+              </span>
+            </div>
+          </div>
+        )}
         {/* ################################################################## */}
 
         {/* testing container */}
