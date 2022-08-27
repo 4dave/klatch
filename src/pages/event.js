@@ -52,7 +52,6 @@ const Event = () => {
       if (doc.exists()) {
         setEvent(doc.data())
       } else {
-        // setDeleted(true)
         router.push("/deleted")
       }
     })
@@ -133,8 +132,6 @@ const Event = () => {
       return false
     }
   }
-
-  // console.log(event)
 
   return (
     // body layout
