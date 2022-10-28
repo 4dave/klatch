@@ -91,10 +91,7 @@ const Events = () => {
                 <span className="text-4xl text-slate-700">Event List</span>
                 {events.map((event) => (
                   <li className="py-2 list-none" key={event.id}>
-                    <Link href={`/event?${event.id}`}>
-                      <a>{event.name}</a>
-                    </Link>{" "}
-                    -{" "}
+                    <Link href={`/event?${event.id}`}>{event.name}</Link> -{" "}
                     {new Date(event.date.seconds * 1000).toLocaleDateString(
                       "en-US"
                     )}
