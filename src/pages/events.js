@@ -23,7 +23,7 @@ const Events = () => {
   const [date, setDate] = useState("")
   const [loading, setLoading] = useState(false)
   const [events, setEvents] = useState([])
-  const { adminUser } = authConfig
+  const { adminUser, adminUser2, adminUser3 } = authConfig
   // const [loggedin, setLoggedin] = useState(false)
   // const router = useRouter()
   const [formFields, setFormFields] = useState({
@@ -75,7 +75,11 @@ const Events = () => {
     await deleteDoc(doc(db, "event", id))
   }
 
-  if (user?.email === adminUser) {
+  if (
+    user?.email === adminUser ||
+    user?.email === adminUser2 ||
+    user?.email === adminUser3
+  ) {
     return (
       <div className="w-screen p-4">
         <div className="flex flex-col md:flex-row gap-2 justify-center">
