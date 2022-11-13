@@ -87,3 +87,16 @@ a {
   color: rgba(114, 28, 36,1);
 }
 
+/* add footer at bottom of page */
+
+.login {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.login :hover {
+  color: #2563eb;
+}
